@@ -1,38 +1,42 @@
-.App {
-  text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  box-sizing: border-box;
+  border-collapse: collapse;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html, body {
+  height: 100%;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.infoViz {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: 
+    "leaflet leaflet narrative"
+    "leaflet leaflet narrative"
+    "leaflet leaflet chart";
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.leaflet-container {
+  grid-area: leaflet;
 }
-
-.App-link {
-  color: #61dafb;
+.leaflet-pane {
+  display: block;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.narrative {
+  grid-area: narrative;
+  padding: 1rem;
+}
+.narrative h2 {
+  margin-bottom: 10px;
+}
+.chart {
+  grid-area: chart;
+}
+.chart svg {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
