@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 import L from 'leaflet'
+import fetch from 'isomorphic-fetch'
+import Loader from './Components/Loader';
 import './App.css'
 
 import BarChart from './Components/BarChart'
 
-const geoJson = require('./affected_people.json');
 const position = [49,-123];
 
 class App extends Component {
+  
   state = {
     markerRadius: 30,
     map: React.createRef(),
@@ -17,13 +19,36 @@ class App extends Component {
       width: 800,
       height: 600,
     },
+    loading: true,
+  }
+  
+  componentDidMount() {
+    const dataSources = { 
+      hazard: {
+        url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_agg_view.geojson',
+        property: 'sc_DP30',
+      },
+      hazardThreat: {
+        url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_threat_agg_view.geojson',
+        property: 'Eq_Bldgs',
+        
+      },
+    }
+    fetch(dataSources.hazardThreat.url)
+      .then(res => res.json())
+      .then(json => this.setState(
+        { 
+          geoJson: json,
+          loading: false,
+          property: dataSources.hazardThreat.property,
+        }
+      ));
   }
   
   bindFeatures = (feature, layer) => {
     layer.on({
       click: this.featureClick
     });
-    
   }
 
   featureClick = (e) => {
@@ -32,7 +57,6 @@ class App extends Component {
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
     dataSet.splice('id', 1)
-    console.log(dataSet)
     this.setState({ chartData: {
       ...chartData,
       dataSet,
@@ -40,7 +64,7 @@ class App extends Component {
   }
 
   pointToLayer = (feature, latlng) => {
-    const val = parseFloat(feature.properties['sc_DP30'])
+    const val = parseFloat(feature.properties['Eq_Bldgs'])
     const heat = val*0.256
     if(heat === 0) { return null }
     const fillOpacity = val/20
@@ -50,9 +74,20 @@ class App extends Component {
     const b = parseInt(heat/4,10)
     return L.circle(latlng, {fillColor: `rgb(${r},${g},${b})`, fill: true, fillOpacity, radius, stroke: false})
   }
-
+  
+  styles = (feature) => {
+    const { property } = this.state
+    if (Number(feature.properties[property]) === 0) return {color: "#ff0000"};
+    if (Number(feature.properties[property]) > 0 && Number(feature.properties[property]) <= 100) return {color: "#58d0f8"};
+    if (Number(feature.properties[property]) > 100 && Number(feature.properties[property]) <= 200) return {color: "#fdfda1"};
+    if (Number(feature.properties[property]) > 200 && Number(feature.properties[property]) <= 400) return {color: "#f5ff2b"};
+    if (Number(feature.properties[property]) > 400) return {color: "#f88348"};
+    
+  }
+  
   render() {
-    const { map, chartData } = this.state
+    const { map, chartData, geoJson } = this.state
+    if (this.state.loading) return <Loader />;
     return (
       <div className="infoViz">
         <Map center={position} zoom={10} ref={map}>
@@ -64,6 +99,7 @@ class App extends Component {
             data={geoJson}
             onEachFeature={this.bindFeatures}
             pointToLayer={this.pointToLayer} 
+            style={this.styles}
           />
         </Map>
         <div className="narrative">
