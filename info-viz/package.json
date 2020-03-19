@@ -7,13 +7,15 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "d3": "^5.15.0",
+    "isomorphic-fetch": "^2.2.1",
     "leaflet": "^1.6.0",
     "react": "^16.12.0",
     "react-d3-library": "^1.1.8",
     "react-dom": "^16.12.0",
     "react-leaflet": "^2.6.1",
     "react-leaflet-heatmap-layer": "^2.0.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "react-table": "^7.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
