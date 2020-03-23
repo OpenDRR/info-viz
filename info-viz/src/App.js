@@ -20,6 +20,24 @@ class App extends Component {
     loading: true,
   }
   
+  bindFeatures = (feature, layer) => {
+    layer.on({
+      click: this.featureClick
+    });
+  }
+  
+  featureClick = (e) => {
+    const { chartData } = this.state
+    var layer = e.target;
+    const data = layer.feature.properties
+    const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
+    dataSet.splice('id', 1)
+    this.setState({ chartData: {
+      ...chartData,
+      dataSet,
+    } })
+  }
+  
   componentDidMount() {
     // get and process url params
     const url = window.location.search
@@ -76,7 +94,7 @@ class App extends Component {
     }
     return (
       <div className="infoViz">
-        <ChoroplethMap center={center} data={geoJson} property={property} />
+        <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         <div className="narrative">
           <h2>{title}</h2>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
