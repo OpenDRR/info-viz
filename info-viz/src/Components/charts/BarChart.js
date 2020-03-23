@@ -1,7 +1,7 @@
 import React from 'react'
-import d3DataToJSX from '../d3utils/d3DataToJSX'
-import ChildComponent from './ChildComponent'
-import createBarChart from './constructors/createBarChart'
+import d3DataToJSX from '../../utils/d3utils/d3DataToJSX'
+import ChildComponent from '../ChildComponent'
+import createBarChart from '../constructors/createBarChart'
 
 export default class BarChart extends React.Component {
 

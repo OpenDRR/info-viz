@@ -1,12 +1,12 @@
 import React from 'react';
-import createReactComponents from '../d3utils/createReactComponents';
-import applyData from '../d3utils/element-properties/applyData';
-import applyZoomData from '../d3utils/element-properties/applyZoomData';
-import applyTransitionData from '../d3utils/element-properties/applyTransitionData';
-import applyChartData from '../d3utils/element-properties/applyChartData';
-import mountD3Functions from '../d3utils/element-properties/mountD3Functions';
-import registerOnListeners from '../d3utils/element-properties/registerOnListeners';
-import registerEventListeners from '../d3utils/element-properties/registerEventListeners';
+import createReactComponents from '../utils/d3utils/createReactComponents';
+import applyData from '../utils/d3utils/element-properties/applyData';
+import applyZoomData from '../utils/d3utils/element-properties/applyZoomData';
+import applyTransitionData from '../utils/d3utils/element-properties/applyTransitionData';
+import applyChartData from '../utils/d3utils/element-properties/applyChartData';
+import mountD3Functions from '../utils/d3utils/element-properties/mountD3Functions';
+import registerOnListeners from '../utils/d3utils/element-properties/registerOnListeners';
+import registerEventListeners from '../utils/d3utils/element-properties/registerEventListeners';
 
 class childComponent extends React.Component {
 
