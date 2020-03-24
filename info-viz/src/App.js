@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Loader from './Components/Loader';
 import ChoroplethMap from './Components/maps/ChoroplethMap'
+import BubbleMap from './Components/maps/BubbleMap'
 import BarChart from './Components/charts/BarChart'
 import Table from './Components/charts/Table';
 import { extractParams, retrieveData } from './utils/services/dataSources';
@@ -42,7 +43,7 @@ class App extends Component {
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
-    const { property, chart, center, title } = params
+    const { property, chart, center, title, mapType } = params
     // get data
     retrieveData(params)
       .then(geoJson => 
@@ -53,6 +54,7 @@ class App extends Component {
             property,
             columns,
             detailsComponent: chart,
+            mapType,
             center,
             title,
           }
@@ -84,17 +86,29 @@ class App extends Component {
     if (this.state.loading) return <Loader />;
 
     // check which component we will use
-    let chartComponent;
-    if (this.state.detailsComponent === 'table') {
-      chartComponent = <Table columns={columns} data={chartData.dataSet} />;
+    let chartComponent
+    switch(this.state.detailsComponent) {
+      case 'table':
+        chartComponent =  <Table columns={columns} data={chartData.dataSet} />
+        break
+      case 'barchart':
+        chartComponent =  <BarChart data={chartData} />
+        break
     }
-
-    if (this.state.detailsComponent === 'barchart') {
-      chartComponent = <BarChart data={chartData} />;
+    
+    let mapComponent
+    switch(this.state.mapType) {
+      case 'choroplet':
+        mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        break
+      case 'bubble':
+        mapComponent =  <BubbleMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        break
     }
+    
     return (
       <div className="infoViz">
-        <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        {mapComponent}
         <div className="narrative">
           <h2>{title}</h2>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

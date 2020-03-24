@@ -1,5 +1,4 @@
 import React from 'react'
-import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
 const ChoroplethMap = (props) => {
