@@ -2,7 +2,7 @@ import React from 'react'
 import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
-const ChoroplethMap = (props) => {
+const BubbleMap = (props) => {
   
   const pointToLayer = (feature, latlng) => {
     const { property } = props
@@ -28,4 +28,4 @@ const ChoroplethMap = (props) => {
         </Map>
     )
 };
-export default ChoroplethMap
+export default BubbleMap
