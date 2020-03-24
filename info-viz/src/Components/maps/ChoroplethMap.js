@@ -1,21 +1,7 @@
 import React from 'react'
-import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
 const ChoroplethMap = (props) => {
-  
-  const pointToLayer = (feature, latlng) => {
-    const { property } = props
-    const val = parseFloat(feature.properties[property])
-    const heat = val*0.256
-    if(heat === 0) { return null }
-    const fillOpacity = val/20
-    const radius = 200 + (heat*2)
-    const r = parseInt(heat/2+128,10)
-    const g = parseInt(heat,10)
-    const b = parseInt(heat/4,10)
-    return L.circle(latlng, {fillColor: `rgb(${r},${g},${b})`, fill: true, fillOpacity, radius, stroke: false})
-  }
   
   const styles = (feature) => {
     const { property } = props
@@ -35,7 +21,6 @@ const ChoroplethMap = (props) => {
           <GeoJSON
             data={data}
             onEachFeature={bind}
-            pointToLayer={pointToLayer}
             style={styles}
           />
         </Map>

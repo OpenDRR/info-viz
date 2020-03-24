@@ -1,7 +1,6 @@
 const applyD3ReactId = (children, counter) => {
   var count = -1;
   var length = 0;
-  var childCount = 0;
   var parentCount = 0;
   var result = {state: {}, children: []};
 
@@ -10,7 +9,6 @@ const applyD3ReactId = (children, counter) => {
     parent.forEach( (child, i) => {
       var d3Attributes = Object.keys(child);
       var id = child.localName + '.' + counter + '.' + parentCount + '.' + count;
-      var currentNode = child['data-react-d3-id'] = id;
       var resultObj = result.state[id] = {};
 
       if(child.childNodes.length) length = child.childNodes.length;
