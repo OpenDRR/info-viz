@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import extractData from './extractData';
 
 const d3DataToJSX = nodes => {

@@ -22,11 +22,7 @@ const dataSources = {
     
 const retrieveData = async (args) => {
     const { 
-        scenario,
-        mapType,
-        chart,
-        property,
-        center,
+        scenario
     } = args
     // set url
     const dataSource = dataSources[scenario];

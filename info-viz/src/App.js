@@ -94,6 +94,9 @@ class App extends Component {
       case 'barchart':
         chartComponent =  <BarChart data={chartData} />
         break
+      default:
+        chartComponent =  <Table columns={columns} data={chartData.dataSet} />
+        break
     }
     
     let mapComponent
@@ -103,6 +106,9 @@ class App extends Component {
         break
       case 'bubble':
         mapComponent =  <BubbleMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        break
+      default:
+        mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
     }
     
