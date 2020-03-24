@@ -95,7 +95,7 @@ class App extends Component {
         chartComponent =  <BarChart data={chartData} />
         break
       default:
-        chartComponent =  <Table columns={columns} data={chartData.dataSet} />
+        chartComponent =  <div></div>
         break
     }
     

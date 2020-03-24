@@ -25,6 +25,7 @@ const retrieveData = async (args) => {
         scenario
     } = args
     // set url
+    if (!scenario) return ;
     const dataSource = dataSources[scenario];
     
     return fetch(dataSource.url)
@@ -37,11 +38,16 @@ const retrieveData = async (args) => {
 const extractParams = (url) => { 
   const parsedParams = queryString.parse(url);
   // TODO: clean params
-  const { center } = parsedParams;
+  let { center } = parsedParams;
   if (center) {
     const coordinates = center.split(',');
     parsedParams.center = [Number(coordinates[0]),Number(coordinates[1])];  
+  } else {
+    parsedParams.center = [ 49.3, -123.07]
   }
+  
+  if (!parsedParams.title) parsedParams.title = 'Default Title';
+  
 
   return parsedParams;
 }
