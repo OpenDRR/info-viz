@@ -4,14 +4,15 @@ import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
 const ChoroplethMap = (props) => {
   
-  const styles = (feature) => {
+  const pointToLayer = (feature, latlng) => {
     const { property } = props
-    if (Number(feature.properties[property]) === 0) return {color: "#ffffff", opacity: 0.1 }
-    if (Number(feature.properties[property]) > 0 && Number(feature.properties[property]) <= 100) return {color: "#58d0f8", weight: 1}
-    if (Number(feature.properties[property]) > 100 && Number(feature.properties[property]) <= 200) return {color: "#fdfda1", weight: 1}
-    if (Number(feature.properties[property]) > 200 && Number(feature.properties[property]) <= 400) return {color: "#f5ff2b", weight: 1}
-    if (Number(feature.properties[property]) > 400) return {color: "#f88348", weight: 1}
+    const val = parseFloat(feature.properties[property])
+    if(val === 0) { return null }
+    const fillOpacity = 0.5
+    const radius = 200 * val
+    return L.circle(latlng, {fillColor: 'rgb(255,0,0)', fill: true, fillOpacity, radius, stroke: false})
   }
+  
   const { center, data, bind } = props
     return (
       <Map center={center} zoom={12} ref={React.createRef()}>
@@ -22,7 +23,7 @@ const ChoroplethMap = (props) => {
           <GeoJSON
             data={data}
             onEachFeature={bind}
-            style={styles}
+            pointToLayer={pointToLayer}
           />
         </Map>
     )
