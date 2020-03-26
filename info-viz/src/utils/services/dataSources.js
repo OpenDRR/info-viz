@@ -3,6 +3,11 @@ import queryString from 'query-string'
 
 // define some datasources
 const dataSources = {
+  earthquake_affectedpeople: {
+    url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_indicators_affectedpeople_idm7p1_jdf_rlz_0_b0.json',
+    property: 'sc_DP30',
+    detailsComponent: 'barchart',
+  },
   hazard: {
     url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_agg_view.geojson',
     property: 'sc_DP30',
@@ -18,6 +23,7 @@ const dataSources = {
     property: 'Eq_Bldgs',
     detailsComponent: 'barchart',
   },
+  
 }
     
 const retrieveData = async (args) => {

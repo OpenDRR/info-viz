@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Loader from './Components/Loader';
 import ChoroplethMap from './Components/maps/ChoroplethMap'
+import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
 import BarChart from './Components/charts/BarChart'
 import Table from './Components/charts/Table';
@@ -82,10 +83,10 @@ class App extends Component {
   render() {
     const { chartData, geoJson, columns, center, property, title } = this.state
     
-    // loader while we wait fetching data
+    // loader while fetching data
     if (this.state.loading) return <Loader />;
 
-    // check which component we will use
+    // set chart component
     let chartComponent
     switch(this.state.detailsComponent) {
       case 'table':
@@ -98,7 +99,7 @@ class App extends Component {
         chartComponent =  <div></div>
         break
     }
-    
+    // set map component
     let mapComponent
     switch(this.state.mapType) {
       case 'choroplet':
@@ -106,6 +107,9 @@ class App extends Component {
         break
       case 'bubble':
         mapComponent =  <BubbleMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        break
+      case 'density':
+        mapComponent =  <DensityMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
       default:
         mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
