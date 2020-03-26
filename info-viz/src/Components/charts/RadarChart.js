@@ -1,9 +1,9 @@
 import React from 'react'
 import d3DataToJSX from '../../utils/d3utils/d3DataToJSX'
 import ChildComponent from '../ChildComponent'
-import createBarChart from '../constructors/createBarChart'
+import createRadarChart from '../constructors/createRadarChart'
 
-export default class BarChart extends React.Component {
+export default class RadarChart extends React.Component {
 
   constructor(props) {
     super(props)
@@ -11,7 +11,7 @@ export default class BarChart extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let d3Data = d3DataToJSX(createBarChart(nextProps.data))
+    let d3Data = d3DataToJSX(createRadarChart(nextProps.data))
     this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
   }
 
