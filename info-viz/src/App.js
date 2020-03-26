@@ -4,6 +4,7 @@ import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
 import BarChart from './Components/charts/BarChart'
+import RadarChart from './Components/charts/RadarChart'
 import Table from './Components/charts/Table';
 import { extractParams, retrieveData } from './utils/services/dataSources';
 import './App.css'
@@ -13,12 +14,7 @@ class App extends Component {
   state = {
     markerRadius: 30,
     map: React.createRef(),
-    chartData: {
-      margins: {top: 0, right: 50, bottom: 200, left: 50},
-      width: 800,
-      height: 600,
-      dataSet: [],
-    },
+    chartData: [],
     loading: true,
   }
   
@@ -34,10 +30,7 @@ class App extends Component {
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
     dataSet.splice('id', 1)
-    this.setState({ chartData: {
-      ...chartData,
-      dataSet,
-    } })
+    this.setState({ chartData: dataSet })
   }
   
   componentDidMount() {
@@ -94,6 +87,9 @@ class App extends Component {
         break
       case 'barchart':
         chartComponent =  <BarChart data={chartData} />
+        break
+      case 'radarchart':
+        chartComponent =  <RadarChart data={chartData} />
         break
       default:
         chartComponent =  <div></div>
