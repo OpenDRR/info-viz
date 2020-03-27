@@ -1,27 +1,37 @@
 import React from 'react'
+import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
+import HeatmapLayer from 'react-leaflet-heatmap-layer'
+import { addressPoints } from './sample-datapoints-density.js';
 
 const DensityMap = (props) => {
   
-  const styles = (feature) => {
+  const pointToLayer = (feature, latlng) => {
     const { property } = props
-    if (Number(feature.properties[property]) === 0) return {color: "#ffffff", opacity: 0.1 }
-    if (Number(feature.properties[property]) > 0 && Number(feature.properties[property]) <= 100) return {color: "#58d0f8", weight: 1}
-    if (Number(feature.properties[property]) > 100 && Number(feature.properties[property]) <= 200) return {color: "#fdfda1", weight: 1}
-    if (Number(feature.properties[property]) > 200 && Number(feature.properties[property]) <= 400) return {color: "#f5ff2b", weight: 1}
-    if (Number(feature.properties[property]) > 400) return {color: "#f88348", weight: 1}
+    const val = parseFloat(feature.properties[property])
+    
+    const fillOpacity = 0.5
+    const radius = 4 * val
+    return L.heatLayer(latlng, {fillColor: 'rgb(255,0,0)', fill: true, fillOpacity, radius, stroke: false})
   }
+  
   const { center, data, bind } = props
+  
     return (
-      <Map center={center} zoom={12} ref={React.createRef()}>
+      <Map center={center} zoom={13} ref={React.createRef()}>
           <TileLayer
             url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
-          <GeoJSON
-            data={data}
+          <HeatmapLayer
+            fitBoundsOnLoad
+            fitBoundsOnUpdate
+            points={addressPoints}
+            longitudeExtractor={m => m[1]}
+            latitudeExtractor={m => m[0]}
+            intensityExtractor={m => parseFloat(m[2])} 
             onEachFeature={bind}
-            style={styles}
+            pointToLayer={pointToLayer}
           />
         </Map>
     )
