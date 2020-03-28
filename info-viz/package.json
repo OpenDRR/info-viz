@@ -9,6 +9,7 @@
     "d3": "^5.15.0",
     "isomorphic-fetch": "^2.2.1",
     "leaflet": "^1.6.0",
+    "leaflet-side-by-side": "^2.1.0",
     "lodash": "^4.17.15",
     "query-string": "^6.11.1",
     "react": "^16.12.0",

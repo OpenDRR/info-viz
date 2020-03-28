@@ -3,6 +3,7 @@ import Loader from './Components/Loader';
 import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
+import SwipeMap from './Components/maps/SwipeMap'
 import BarChart from './Components/charts/BarChart'
 import RadarChart from './Components/charts/RadarChart'
 import Table from './Components/charts/Table';
@@ -25,7 +26,6 @@ class App extends Component {
   }
   
   featureClick = (e) => {
-    const { chartData } = this.state
     var layer = e.target;
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
@@ -83,7 +83,7 @@ class App extends Component {
     let chartComponent
     switch(this.state.detailsComponent) {
       case 'table':
-        chartComponent =  <Table columns={columns} data={chartData.dataSet} />
+        chartComponent =  <Table columns={columns} data={chartData} />
         break
       case 'barchart':
         chartComponent =  <BarChart data={chartData} />
@@ -106,6 +106,9 @@ class App extends Component {
         break
       case 'density':
         mapComponent =  <DensityMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        break
+      case 'swipe':
+        mapComponent =  <SwipeMap />
         break
       default:
         mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
