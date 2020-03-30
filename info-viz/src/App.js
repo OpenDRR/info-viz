@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import Loader from './Components/Loader';
+import Loader from './Components/Loader'
 import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
 import BarChart from './Components/charts/BarChart'
 import RadarChart from './Components/charts/RadarChart'
-import Table from './Components/charts/Table';
-import { extractParams, retrieveData } from './utils/services/dataSources';
+import AsterChart from './Components/charts/AsterChart'
+import Table from './Components/charts/Table'
+import { extractParams, retrieveData } from './utils/services/dataSources'
 import './App.css'
 
 class App extends Component {
@@ -21,12 +22,12 @@ class App extends Component {
   bindFeatures = (feature, layer) => {
     layer.on({
       click: this.featureClick
-    });
+    })
   }
   
   featureClick = (e) => {
     const { chartData } = this.state
-    var layer = e.target;
+    var layer = e.target
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
     dataSet.splice('id', 1)
@@ -70,14 +71,14 @@ class App extends Component {
             }
           ]
         },
-      ];
+      ]
   }
   
   render() {
     const { chartData, geoJson, columns, center, property, title } = this.state
     
     // loader while fetching data
-    if (this.state.loading) return <Loader />;
+    if (this.state.loading) return <Loader />
 
     // set chart component
     let chartComponent
@@ -87,6 +88,9 @@ class App extends Component {
         break
       case 'barchart':
         chartComponent =  <BarChart data={chartData} />
+        break
+      case 'asterchart':
+        chartComponent =  <AsterChart data={chartData} />
         break
       case 'radarchart':
         chartComponent =  <RadarChart data={chartData} />
@@ -127,4 +131,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
