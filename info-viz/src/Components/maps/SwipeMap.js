@@ -1,70 +1,64 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import L from "leaflet"
 import "leaflet-side-by-side"
 import "leaflet-tilelayer-geojson"
 
 const SwipeMap = (props) => {
-   useEffect(() => {
-    const map = L.map("map").setView([51.505, -0.09], 13)
-    //const { center, data, bind, property } = props
-     var style = {
-        "clickable": true,
-        "color": "#00D",
-        "fillColor": "#00D",
-        "weight": 1.0,
-        "opacity": 0.3,
-        "fillOpacity": 0.2
-    }
-    var hoverStyle = {
-        "fillOpacity": 0.5
-    }
-    const geoJsonUrl = 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_indicators_affectedpeople_idm7p1_jdf_rlz_0_b0.json'
-    var osmLayer = new L.TileLayer.GeoJSON(geoJsonUrl, {
-            clipTiles: true,
-            unique: function (feature) {
-                return feature.id 
-            }
-        },{
-            style: style,
-            onEachFeature: function (feature, layer) {
-                console.log('feature',feature)
-                if (feature.properties) {
-                    var popupString = '<div class="popup">'
-                    for (var k in feature.properties) {
-                        var v = feature.properties[k]
-                        popupString += k + ': ' + v + '<br />'
-                    }
-                    popupString += '</div>'
-                    layer.bindPopup(popupString)
-                }
-                if (!(layer instanceof L.Point)) {
-                    layer.on('mouseover', function () {
-                        layer.setStyle(hoverStyle)
-                    })
-                    layer.on('mouseout', function () {
-                        layer.setStyle(style)
-                    })
-                }
-            }
+    // get values from props
+    const [values] = useState(props)
+
+    useEffect(() => {
+        const { data, center, property, bind } = values
+        let { property2 } = values
+        if (!property2) property2 = property
+
+        // set styles for left layer
+        const leftStyles = (feature) => {
+            return Number(feature.properties[property]) > 400 ? { color: "#f88348", weight: 1 } :
+                Number(feature.properties[property]) > 200 ? { color: "#f5ff2b", weight: 1 } :
+                Number(feature.properties[property]) > 100 ? { color: "#fdfda1", weight: 1 } :
+                Number(feature.properties[property]) > 0 ? { color: "#58d0f8", weight: 1 } :
+                Number(feature.properties[property]) === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
         }
-    )
-    
-    //map.addLayer(osmLayer)
-    var stamenLayer = L.tileLayer(
-      "https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png",
-      {
-        attribution:
-          'Map tiles by <a href="http://stamen.com">Stamen Design</a>, ' +
-          '<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash ' +
-          "Map data {attribution.OpenStreetMap}",
-        minZoom: 1,
-        maxZoom: 16
-      }
-    ).addTo(map)
 
-    L.control.sideBySide(stamenLayer, osmLayer).addTo(map)
-  }, [])
+        // set styles for right layer
+        const rightStyles = (feature) => {
+            return Number(feature.properties[property2]) > 400 ? { color: "red", weight: 1 } :
+                Number(feature.properties[property2]) > 200 ? { color: "red", weight: 1 } :
+                Number(feature.properties[property2]) === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
+        }
+        // create map
+        const map = L.map("map").setView(center, 13)
 
-  return <div id="map" />
+        // create panels
+        map.createPane('left')
+        map.createPane('right')
+
+        // set base map layer
+        var baseMap = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            layers: baseMap
+        }).addTo(map)
+
+        // set left map
+        var overlay1 = L.geoJson(data, {
+            style: leftStyles,
+            pane: 'left',
+            onEachFeature: bind,
+        }).addTo(map)
+
+        // set right map
+        var overlay2 = L.geoJson(data, {
+            style: rightStyles,
+            pane: 'right',
+            onEachFeature: bind,
+        }).addTo(map)
+
+        // create swiper control
+        L.control.sideBySide(overlay1, overlay2).addTo(map)
+    }, [])
+
+    return <div id="map" />
 }
 export default SwipeMap

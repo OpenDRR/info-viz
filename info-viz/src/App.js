@@ -27,7 +27,7 @@ class App extends Component {
   featureClick = (e) => {
     var layer = e.target;
     const data = layer.feature.properties
-    const dataSet = Object.keys(data).map(label => ({ label, value: data[label] }) )
+    const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )
     dataSet.splice('id', 1)
     this.setState({ chartData: dataSet })
   }
@@ -36,7 +36,7 @@ class App extends Component {
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
-    const { property, chart, center, title, mapType } = params
+    const { property, property2, chart, center, title, mapType } = params
     // get data
     getData(params)
       .then(geoJson => 
@@ -45,6 +45,7 @@ class App extends Component {
             geoJson,
             loading: false,
             property,
+            property2,
             chart,
             mapType,
             center,
@@ -55,7 +56,7 @@ class App extends Component {
   }
   
   render() {
-    const { chartData, geoJson, center, property, title, chart } = this.state
+    const { chartData, geoJson, center, property, property2, title, chart } = this.state
     
     // loader while fetching data
     if (this.state.loading) return <Loader />;
@@ -73,7 +74,7 @@ class App extends Component {
         mapComponent =  <DensityMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
       case 'swipe':
-        mapComponent =  <SwipeMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
+        mapComponent =  <SwipeMap center={center} data={geoJson} property={property} property2={property2} bind={this.bindFeatures}/>
         break
       default:
         mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
