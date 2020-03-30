@@ -23,6 +23,7 @@ const DensityMap = (props) => {
   }
   
   const { center, data, bind, property } = props
+    console.log('propsDensity',props)
     const dataPoints = processDataset(data)
     return (
       <Map center={center} zoom={13} ref={React.createRef()}>

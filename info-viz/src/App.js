@@ -4,10 +4,9 @@ import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
 import SwipeMap from './Components/maps/SwipeMap'
-import BarChart from './Components/charts/BarChart'
-import RadarChart from './Components/charts/RadarChart'
-import Table from './Components/charts/Table';
-import { extractParams, retrieveData } from './utils/services/dataSources';
+import Chart from './Components/charts/Chart'
+
+import { extractParams, getData } from './utils/services/dataSources';
 import './App.css'
 
 class App extends Component {
@@ -39,62 +38,28 @@ class App extends Component {
     const params = extractParams(url)
     const { property, chart, center, title, mapType } = params
     // get data
-    retrieveData(params)
+    getData(params)
       .then(geoJson => 
         this.setState(
           { 
             geoJson,
             loading: false,
             property,
-            columns,
-            detailsComponent: chart,
+            chart,
             mapType,
             center,
             title,
           }
         )      
       )
-    
-    // define columns for table data
-    const columns = [
-        {
-          Header: 'Attributes',
-          columns: [
-            {
-              Header: "Attribute",
-              accessor: "label"
-            },
-            {
-              Header: "Value",
-              accessor: "value"
-            }
-          ]
-        },
-      ];
   }
   
   render() {
-    const { chartData, geoJson, columns, center, property, title } = this.state
+    const { chartData, geoJson, center, property, title, chart } = this.state
     
     // loader while fetching data
     if (this.state.loading) return <Loader />;
-
-    // set chart component
-    let chartComponent
-    switch(this.state.detailsComponent) {
-      case 'table':
-        chartComponent =  <Table columns={columns} data={chartData} />
-        break
-      case 'barchart':
-        chartComponent =  <BarChart data={chartData} />
-        break
-      case 'radarchart':
-        chartComponent =  <RadarChart data={chartData} />
-        break
-      default:
-        chartComponent =  <div></div>
-        break
-    }
+    
     // set map component
     let mapComponent
     switch(this.state.mapType) {
@@ -108,7 +73,7 @@ class App extends Component {
         mapComponent =  <DensityMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
       case 'swipe':
-        mapComponent =  <SwipeMap />
+        mapComponent =  <SwipeMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
       default:
         mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
@@ -123,7 +88,7 @@ class App extends Component {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </div>
         <div className="chart">
-          {chartComponent}
+          <Chart chart={chart} chartData={chartData} />
         </div>
       </div>
     )
