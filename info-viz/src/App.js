@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Loader from './Components/Loader';
+import Loader from './Components/Loader'
 import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
 import BubbleMap from './Components/maps/BubbleMap'
 import SwipeMap from './Components/maps/SwipeMap'
 import Chart from './Components/charts/Chart'
-
 import { extractParams, getData } from './utils/services/dataSources';
+
 import './App.css'
 
 class App extends Component {
@@ -21,11 +21,13 @@ class App extends Component {
   bindFeatures = (feature, layer) => {
     layer.on({
       click: this.featureClick
-    });
+    })
   }
   
   featureClick = (e) => {
-    var layer = e.target;
+
+    const { chartData } = this.state
+    var layer = e.target
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )
     dataSet.splice('id', 1)
@@ -59,8 +61,9 @@ class App extends Component {
     const { chartData, geoJson, center, property, property2, title, chart } = this.state
     
     // loader while fetching data
-    if (this.state.loading) return <Loader />;
-    
+
+    if (this.state.loading) return <Loader />
+
     // set map component
     let mapComponent
     switch(this.state.mapType) {
@@ -96,4 +99,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

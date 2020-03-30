@@ -33,10 +33,10 @@ const createRadarChart = data => {
   const container = svg.append('g')
     .attr("width", containerWidth)
     .attr("height", containerHeight)
-	  .attr('transform', `translate(${(width/2)}, ${(height/2)})`);
+	  .attr('transform', `translate(${(width/2)}, ${(height/2)})`)
   
     var axisGrid = container.append("g")
-    .attr("class", "axisWrapper");
+    .attr("class", "axisWrapper")
     
     axisGrid.selectAll(".levels")
         .data(d3.range(1,(axisCircles+1)).reverse())
@@ -46,13 +46,13 @@ const createRadarChart = data => {
       .attr("r", (d, i) => radius/axisCircles*d)
       .style("fill", "#CDCDCD")
       .style("stroke", "#CDCDCD")
-      .style("fill-opacity", 0.1);
+      .style("fill-opacity", 0.1)
   
     const axis = axisGrid.selectAll(".axis")
         .data(axesDomain)
         .enter()
       .append("g")
-      .attr("class", "axis");
+      .attr("class", "axis")
 
     axis.append("line")
         .attr("x1", 0)
@@ -61,7 +61,7 @@ const createRadarChart = data => {
         .attr("y2", (d, i) => rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2))
         .attr("class", "line")
         .style("stroke", "white")
-        .style("stroke-width", "2px");
+        .style("stroke-width", "2px")
 
     axis.append("text")
         .attr("class", "legend")
@@ -71,21 +71,21 @@ const createRadarChart = data => {
     .attr("dy", "0.35em")
         .attr("x", (d, i) => rScale(maxValue * axisLabelFactor) * Math.cos(angleSlice*i - Math.PI/2))
         .attr("y", (d, i) => rScale(maxValue * axisLabelFactor) * Math.sin(angleSlice*i - Math.PI/2))
-        .text(d => d);
+        .text(d => d)
   
   const plots = container.append('g')
     .selectAll('g')
     .data([data])
     .join('g')
       .attr("fill", "none")
-      .attr("stroke", "steelblue");
+      .attr("stroke", "steelblue")
 
   plots.append('path')
     .attr("d", d => radarLine(d.map(v => v.value)))
     .attr("fill", (d, i) => color(i))
     .attr("fill-opacity", 0.1)
     .attr("stroke", (d, i) => color(i))
-    .attr("stroke-width", 2);
+    .attr("stroke-width", 2)
 
     plots.selectAll("circle")
       .data(d => d)
@@ -93,9 +93,9 @@ const createRadarChart = data => {
         .attr("r", dotRadius)
         .attr("cx", (d,i) => rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2))
         .attr("cy", (d,i) => rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2))
-        .style("fill-opacity", 0.8);
+        .style("fill-opacity", 0.8)
 
-  return svg.node();
+  return svg.node()
 }
 
-export default createRadarChart;
+export default createRadarChart
