@@ -52,7 +52,7 @@ const extractData = (nodes) => {
 
     // Special case for text and tspan tags
     if(output.tag === 'text' || output.tag === 'tspan') {
-      output.props.textContent = obj.childNodes.length ? obj.childNodes[0].data : '';
+      output.props.textcontent = obj.childNodes.length ? obj.childNodes[0].data : '';
     }
 
     // output.props['react-d3-id'] = output.tag + '.' + counter + '.' + i;\
