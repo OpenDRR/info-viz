@@ -23,7 +23,7 @@ const createAsterChart = data => {
     .domain(data.map(d => d.label))
     .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse())
 
-  const outerArcRadius = maxRadius * (data.length+(totalRings/7)) / totalRings
+  const outerArcRadius = maxRadius * (data.length+1) / totalRings
 
   const fnOuterRadius = d => {
     return radiusScale(d.data.value)
@@ -39,10 +39,6 @@ const createAsterChart = data => {
   const fullArc = d3.arc()
     .innerRadius(0)
     .outerRadius(outerArcRadius)
-  
-  const progressArc = d3.arc()
-    .innerRadius(outerArcRadius)
-    .outerRadius(maxRadius)
   
   const arcLabel = d3.arc().innerRadius(radius * 0.7).outerRadius(radius * 0.7)
   
@@ -69,7 +65,7 @@ const createAsterChart = data => {
       .attr("stroke", "#333")
       .attr("d", fullArc)
       .each((d, i) => {
-        let newArc = firstArcSection.exec(d3.select(gFullArcs.selectAll("path")['_groups'][0][i]).attr("d"))[1]
+        let newArc = firstArcSection.exec(d3.select(gFullArcs.selectAll("path").nodes()[i]).attr("d"))[1]
         //let newArc = firstArcSection.exec( d3.select(this).attr("d") )[1]
         newArc = newArc.replace(/,/g , " ")
         // https://www.visualcinnamon.com/2015/09/placing-text-on-arcs.html
@@ -111,7 +107,7 @@ const createAsterChart = data => {
       .attr("stroke", "none")
       .attr("d", arc)
     .append("title")
-      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`)
+      .text(d => `${d.data.label}: 1`)
 
   // Create concentric rings
   let gRings = g.append("g")
@@ -126,7 +122,7 @@ const createAsterChart = data => {
     .attr("fill", "none")
     .attr("stroke", function(d, i){
       // make last ring black, rest white
-      return i == (ringCount.length-1) ? "#222" : "white"
+      return i === (ringCount.length-1) ? "#222" : "white"
     })
     .attr("stroke-width", 1)
   
@@ -142,8 +138,9 @@ const createAsterChart = data => {
    .append("textPath")
     .attr("startOffset","50%")
     .style("text-anchor","middle")
-    .attr("xlink:href",function(d,i){return "#labelArc"+i})
-    .text(d => `${d.data.name}`)
+    .attr("xlink:href", (d,i) => `#labelArc${i}`)
+    .append("tspan")
+      .text(d => `${d.data.label}`)
 
   const gText = g.append("g")
     .classed("g-text", true)
@@ -156,7 +153,6 @@ const createAsterChart = data => {
   
   text.append("tspan")
       .attr("x", 0)
-      .attr("y", "-0.7em")
       .style("font-size", "1.5em")
       .style("font-weight", "bold")
       .text(d => d.data.value)
