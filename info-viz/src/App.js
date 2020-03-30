@@ -26,7 +26,6 @@ class App extends Component {
   
   featureClick = (e) => {
 
-    const { chartData } = this.state
     var layer = e.target
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )

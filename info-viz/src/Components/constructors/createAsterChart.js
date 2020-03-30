@@ -40,10 +40,6 @@ const createAsterChart = data => {
     .innerRadius(0)
     .outerRadius(outerArcRadius)
   
-  const progressArc = d3.arc()
-    .innerRadius(outerArcRadius)
-    .outerRadius(maxRadius)
-  
   const arcLabel = d3.arc().innerRadius(radius * 0.7).outerRadius(radius * 0.7)
   
   const adeg = Math.PI/180
@@ -126,7 +122,7 @@ const createAsterChart = data => {
     .attr("fill", "none")
     .attr("stroke", function(d, i){
       // make last ring black, rest white
-      return i == (ringCount.length-1) ? "#222" : "white"
+      return i === (ringCount.length-1) ? "#222" : "white"
     })
     .attr("stroke-width", 1)
   
