@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import L from "leaflet"
-import "leaflet-side-by-side"
-import "leaflet-tilelayer-geojson"
+import '../../utils/leaflet-side-by-side'
 
 const SwipeMap = (props) => {
     // get values from props
@@ -35,10 +34,9 @@ const SwipeMap = (props) => {
         map.createPane('right')
 
         // set base map layer
-        var baseMap = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+        L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors',
             maxZoom: 19,
-            layers: baseMap
         }).addTo(map)
 
         // set left map
@@ -57,7 +55,7 @@ const SwipeMap = (props) => {
 
         // create swiper control
         L.control.sideBySide(overlay1, overlay2).addTo(map)
-    }, [])
+    }, [values])
 
     return <div id="map" />
 }
