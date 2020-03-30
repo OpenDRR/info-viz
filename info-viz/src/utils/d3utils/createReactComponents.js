@@ -16,7 +16,8 @@ const makeChildNodes = (reactData, stateData, getState) => {
           React.createElement(
             obj.tag,
             passReactState(obj, stateData, getState),
-            obj.props.textContent)
+              obj.props.textcontent
+            )
         )
 
       : React.createElement(obj.tag, obj.props, extractData(obj.children).mappedData.map(obj => makeChildNodes([obj], stateData, getState)))
