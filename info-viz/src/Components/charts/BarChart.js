@@ -4,7 +4,6 @@ import ChildComponent from '../ChildComponent'
 import createBarChart from '../constructors/createBarChart'
 
 export default class BarChart extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {d3DOM: [], state: []}
