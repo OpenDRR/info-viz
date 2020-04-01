@@ -1,6 +1,6 @@
 const d3 = window.d3
 
-const createBarChart = (data, handleClick) => {
+const createBarChart = data => {
 	// if user has defined colors for bars, designate fill colors
 	if (data.fill) {
 		data.forEach((el, i) => el.fill = data.fill[i])
