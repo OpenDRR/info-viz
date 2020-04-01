@@ -106,6 +106,8 @@ const createAsterChart = data => {
       .attr("fill-opacity", 0.8)
       .attr("stroke", "none")
       .attr("d", arc)
+      .style("cursor", "pointer")
+      .attr('onClick', d => "() => { changeMetric('"+d.data.label+"') }")
     .append("title")
       .text(d => `${d.data.label}: 1`)
 

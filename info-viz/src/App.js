@@ -30,19 +30,21 @@ class App extends Component {
     const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )
     dataSet.splice('id', 1)
     this.setState({ chartData: dataSet })
-    console.log(dataSet)
   }
   
   componentWillMount() {
-    window.changeMetric = property => {
-      this.setState({ property })
-      
-    }
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
-    const { property, property2, chart, center, title, text, mapType } = params
+    const { scenario, property, property2, chart, center, title, text, mapType } = params
     // get data
+    window.changeMetric = newProperty => {
+      let properties = `&property=${newProperty}`
+      if(property2) {
+        properties = `&property=${newProperty}&property2=${property2}`
+      }
+      window.location.href = `?scenario=${scenario}&mapType=${mapType}&chart=${chart}${properties}&center=${center}&title=${title}&text=${text}`
+    }
     getData(params).then(geoJson => {
       const objKeys = Object.keys(geoJson.features[0].properties)
       const chartData = []
@@ -61,6 +63,7 @@ class App extends Component {
         property,
         property2,
         chart,
+        scenario,
         mapType,
         center,
         title,
@@ -72,7 +75,6 @@ class App extends Component {
   
   render() {
     const { chartData, geoJson, center, property, property2, title, chart, text } = this.state
-    
     // loader while fetching data
 
     if (this.state.loading) return <Loader />
@@ -105,7 +107,7 @@ class App extends Component {
           {text}
         </div>
         <div className="chart">
-          <Chart chart={chart} chartData={chartData} selectMetric={this.selectMetric} />
+          <Chart chart={chart} chartData={chartData} />
         </div>
       </div>
     )

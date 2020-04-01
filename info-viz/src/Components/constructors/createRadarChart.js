@@ -77,7 +77,7 @@ const createRadarChart = data => {
     .selectAll('g')
     .data([data])
     .join('g')
-      .attr("fill", "none")
+      .attr("fill", "steelblue")
       .attr("stroke", "steelblue")
 
   plots.append('path')
@@ -94,6 +94,8 @@ const createRadarChart = data => {
         .attr("cx", (d,i) => rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2))
         .attr("cy", (d,i) => rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2))
         .style("fill-opacity", 0.8)
+        .style("cursor", "pointer")
+        .attr('onClick', d => "() => { changeMetric('"+d.label+"') }")
 
   return svg.node()
 }
