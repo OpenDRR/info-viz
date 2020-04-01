@@ -6,6 +6,8 @@ const getAttributes = (attributesObject, node) => {
     if(!isNaN(key)) {
       if(attributesObject[key].localName === 'class') {
         attributes['className'] = attributesObject[key].nodeValue;
+      } else if(attributesObject[key].localName === 'onClick') {
+        attributes['onClick'] = eval(attributesObject[key].nodeValue);
       } else if (attributesObject[key].localName.indexOf('-') > -1) {
         let reactKey = toCamelCase(attributesObject[key].localName);
         attributes[reactKey] = attributesObject[key].nodeValue;

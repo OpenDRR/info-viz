@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import Loader from './Components/Loader'
 import ChoroplethMap from './Components/maps/ChoroplethMap'
 import DensityMap from './Components/maps/DensityMap'
@@ -14,7 +15,6 @@ class App extends Component {
   state = {
     markerRadius: 30,
     map: React.createRef(),
-    chartData: [],
     loading: true,
   }
   
@@ -25,35 +25,48 @@ class App extends Component {
   }
   
   featureClick = (e) => {
-
     var layer = e.target
     const data = layer.feature.properties
     const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )
     dataSet.splice('id', 1)
     this.setState({ chartData: dataSet })
+    console.log(dataSet)
   }
   
-  componentDidMount() {
+  componentWillMount() {
+    window.changeMetric = property => {
+      this.setState({ property })
+      
+    }
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
     const { property, property2, chart, center, title, mapType } = params
     // get data
-    getData(params)
-      .then(geoJson => 
-        this.setState(
-          { 
-            geoJson,
-            loading: false,
-            property,
-            property2,
-            chart,
-            mapType,
-            center,
-            title,
-          }
-        )      
-      )
+    getData(params).then(geoJson => {
+      const objKeys = Object.keys(geoJson.features[0].properties)
+      const chartData = []
+      objKeys.forEach(k => {
+        if(k !== 'id') {
+          chartData.push(
+            {label: k, value: _.sumBy(geoJson.features, function(o) {
+              return o.properties[k]
+            })}
+          )
+        }
+      })
+      this.setState({ 
+        geoJson,
+        loading: false,
+        property,
+        property2,
+        chart,
+        mapType,
+        center,
+        title,
+      })
+      this.setState({chartData})
+    })
   }
   
   render() {
@@ -91,7 +104,7 @@ class App extends Component {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </div>
         <div className="chart">
-          <Chart chart={chart} chartData={chartData} />
+          <Chart chart={chart} chartData={chartData} selectMetric={this.selectMetric} />
         </div>
       </div>
     )
