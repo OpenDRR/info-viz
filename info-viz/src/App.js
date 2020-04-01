@@ -41,7 +41,7 @@ class App extends Component {
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
-    const { property, property2, chart, center, title, mapType } = params
+    const { property, property2, chart, center, title, text, mapType } = params
     // get data
     getData(params).then(geoJson => {
       const objKeys = Object.keys(geoJson.features[0].properties)
@@ -64,13 +64,14 @@ class App extends Component {
         mapType,
         center,
         title,
+        text,
       })
       this.setState({chartData})
     })
   }
   
   render() {
-    const { chartData, geoJson, center, property, property2, title, chart } = this.state
+    const { chartData, geoJson, center, property, property2, title, chart, text } = this.state
     
     // loader while fetching data
 
@@ -101,7 +102,7 @@ class App extends Component {
         {mapComponent}
         <div className="narrative">
           <h2>{title}</h2>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          {text}
         </div>
         <div className="chart">
           <Chart chart={chart} chartData={chartData} selectMetric={this.selectMetric} />
