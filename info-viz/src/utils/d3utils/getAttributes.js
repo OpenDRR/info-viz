@@ -7,7 +7,8 @@ const getAttributes = (attributesObject, node) => {
       if(attributesObject[key].localName === 'class') {
         attributes['className'] = attributesObject[key].nodeValue;
       } else if(attributesObject[key].localName === 'onClick') {
-        attributes['onClick'] = eval(attributesObject[key].nodeValue);
+        attributes['onClick'] = eval(attributesObject[key].nodeValue); // eslint-disable-line
+        // eval necessary to convert string onclick
       } else if (attributesObject[key].localName.indexOf('-') > -1) {
         let reactKey = toCamelCase(attributesObject[key].localName);
         attributes[reactKey] = attributesObject[key].nodeValue;

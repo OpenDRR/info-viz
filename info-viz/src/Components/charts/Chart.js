@@ -23,7 +23,7 @@ const Chart = (props) => {
       },
     ]
 
-    const { chartData, chart, selectMetric } = props
+    const { chartData, chart } = props
     // set chart component
     let chartComponent
     switch(chart) {

@@ -3,9 +3,9 @@ import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
 const BubbleMap = (props) => {
-  const { center, data, bind, property } = props
-  const [mapElem, setMap] = useState(React.createRef())
-  const [dataElem, setData] = useState(React.createRef())
+  const { center, data, bind } = props
+  const [mapElem] = useState(React.createRef())
+  const [dataElem] = useState(React.createRef())
 
   const pointToLayer = (feature, latlng) => {
     const { property } = props
