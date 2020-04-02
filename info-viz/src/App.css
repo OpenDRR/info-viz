@@ -13,11 +13,23 @@ html, body {
   width: 100vw;
   height: 100vh;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-areas: 
-    "leaflet leaflet narrative"
-    "leaflet leaflet narrative"
-    "leaflet leaflet chart";
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+@media (min-width: 701px) {
+  .infoViz {
+    grid-template-areas: 
+      "leaflet leaflet narrative"
+      "leaflet leaflet narrative"
+      "leaflet leaflet chart";
+  }
+}
+@media (max-width: 700px){
+  .infoViz {
+    grid-template-areas: 
+    "leaflet leaflet leaflet"
+    "narrative narrative narrative"
+    "chart chart chart";
+  }
 }
 .leaflet-container {
   grid-area: leaflet;
