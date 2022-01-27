@@ -2,7 +2,28 @@ import React from "react";
 import { useTable } from "react-table";
 
 export default function Table({ columns, data }) {
-  
+  // Dummy data to prevent errors before data is gathered
+  if ( !data ) {
+    data = [
+        {
+            "label": "sDt_Collapse_b0",
+            "value": 7
+        },
+        {
+            "label": "sDt_Complete_b0",
+            "value": 4
+        },
+        {
+            "label": "sCt_Res30_b0",
+            "value": 5
+        },
+        {
+          "label": "Sauid",
+          "value": 1
+      }
+    ]
+  }
+
   const {
     getTableProps, // table props from react-table
     getTableBodyProps, // table body props from react-table
@@ -26,7 +47,7 @@ export default function Table({ columns, data }) {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
+        {rows.map((row) => {
           prepareRow(row);
           return (
             <tr {...row.getRowProps()}>

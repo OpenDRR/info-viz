@@ -3,22 +3,22 @@ import L from 'leaflet'
 import { Map, TileLayer, GeoJSON } from 'react-leaflet'
 
 const BubbleMap = (props) => {
-  const { center, data, bind, property } = props
-  const [mapElem, setMap] = useState(React.createRef())
-  const [dataElem, setData] = useState(React.createRef())
+  const { center, data, bind } = props
+  const [mapElem] = useState(React.createRef())
+  const [dataElem] = useState(React.createRef())
 
   const pointToLayer = (feature, latlng) => {
     const { property } = props
     const val = parseFloat(feature.properties[property])
     
     const fillOpacity = 0.5
-    const radius = 4 * val
+    const radius = val
     return L.circle(latlng, {fillColor: 'rgb(255,0,0)', fill: true, fillOpacity, radius, stroke: false})
   }
   return (
     <Map center={center} zoom={13} ref={mapElem}>
       <TileLayer
-        url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+        url='//{s}.tile.osm.org/{z}/{x}/{y}.png'
         attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
       />
       <GeoJSON

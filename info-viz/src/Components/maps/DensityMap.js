@@ -9,7 +9,7 @@ const DensityMap = (props) => {
     const { property } = props
     const val = parseFloat(feature.properties[property])
     const fillOpacity = 0.0
-    const radius = 4 * val
+    const radius = 2 * val
     return L.circle(latlng, {fillColor: 'rgb(255,0,0)', fill: true, fillOpacity, radius, stroke: false})
   }
   
@@ -27,7 +27,7 @@ const DensityMap = (props) => {
     return (
       <Map center={center} zoom={13} ref={React.createRef()}>
           <TileLayer
-            url='https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+            url='//{s}.tile.osm.org/{z}/{x}/{y}.png'
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           <GeoJSON

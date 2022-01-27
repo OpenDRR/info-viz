@@ -23,7 +23,7 @@ const createBarChart = data => {
   const y = d3.scaleLinear().rangeRound([containerHeight, 0])
 
 	// scales x-axis based on user's defined width
-	const xAxis = d3.axisBottom(x)
+  const xAxis = d3.axisBottom(x)
 
 	// scales y-axis based on user's defined height
   const yAxis = d3.axisLeft(y)
@@ -52,7 +52,7 @@ const createBarChart = data => {
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
       .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)" )
+      .attr("transform", "rotate(-90)")
 
 	// append g elements responsible for y-axis tick and label properties
 	svg.append("g")
@@ -78,7 +78,6 @@ const createBarChart = data => {
       .attr("height", d => containerHeight - y(d.value))
       .attr('fill', d => d.fill)
       .attr('onClick', d => "() => { changeMetric('"+d.label+"') }")
-
 	// return built up html tree to be compiled to react elements
 	return node;
 }

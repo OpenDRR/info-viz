@@ -9,9 +9,11 @@ export default class BarChart extends React.Component {
     this.state = {d3DOM: [], state: []}
   }
 
-  componentWillReceiveProps(nextProps) {
-    let d3Data = d3DataToJSX(createBarChart(nextProps.data))
-    this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      let d3Data = d3DataToJSX(createBarChart(this.props.data))
+      this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+    }
   }
 
   render() {

@@ -3,38 +3,29 @@ import queryString from 'query-string'
 
 // define some datasources
 const dataSources = {
-  earthquake_affectedpeople: {
-    url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_indicators_affectedpeople_idm7p1_jdf_rlz_0_b0.json',
-    property: 'sc_DP30',
+  sidney_points: {
+    url: 'https://geo-api.stage.riskprofiler.ca/collections/opendrr_dsra_idm7p1_sidney_indicators_b/items?lang=en_US&f=json&properties=sC_Res3_b0,sC_Res30_b0,sC_Res90_b0,sC_Res180_b0,sC_Res360_b0&limit=30000',
+    property: 'sC_Res30_b0',
   },
-  hazard: {
-    url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_agg_view.geojson',
-    property: 'sc_DP30',
-  },
-  hazardThreat: {
-    url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_scenario_hazard_threat_agg_view.geojson',
-    property: 'Eq_Bldgs',
-  },
-  damageState: {
-    url: 'https://s3-us-west-2.amazonaws.com/data.info-viz.cctech.io/samples/dsra_sim6p8_cr2022_rlz_1_b0_damage_state_agg_view.geojson',
-    property: 'Eq_Bldgs',
-  },
-  
+  sidney_polygons: {
+    url: 'https://geo-api.stage.riskprofiler.ca/collections/opendrr_dsra_idm7p1_sidney_indicators_s/items?lang=en_US&f=json&properties=sDt_Slight_b0,sDt_Moderate_b0,sDt_Extensive_b0,sDt_Complete_b0,sDt_Collapse_b0&limit=20000',
+    property: 'sDt_Complete_b0',
+  },  
 }
     
 const getData = async (args) => {
-    const { 
-        scenario
-    } = args
-    // set url
-    if (!scenario) return 
-    const dataSource = dataSources[scenario]
-    
-    return fetch(dataSource.url)
-      .then(response => response.json())
-      .catch(error => {
-        this.handleError(error)
-      })
+  const { 
+    scenario
+  } = args
+  // set url
+  if (!scenario) return 
+  const dataSource = dataSources[scenario]
+  
+  return fetch(dataSource.url)
+    .then(response => response.json())
+    .catch(error => {
+      this.handleError(error)
+    })
 }
 
 const extractParams = (url) => { 
@@ -44,11 +35,13 @@ const extractParams = (url) => {
     const coordinates = center.split(',')
     parsedParams.center = [Number(coordinates[0]),Number(coordinates[1])]  
   } else {
-    parsedParams.center = [ 49.3, -123.07]
+    parsedParams.center = [49.3, -123.07]
   }
   
   if (!parsedParams.title) parsedParams.title = 'Default Title'
-  
+  if (!parsedParams.mapType) parsedParams.mapType = 'choropleth'
+  if (!parsedParams.scenario) parsedParams.scenario = 'sidney_polygons'
+  if (!parsedParams.property) parsedParams.property = dataSources[parsedParams.scenario].property
 
   return parsedParams
 }
