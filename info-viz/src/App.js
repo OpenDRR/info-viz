@@ -27,12 +27,16 @@ class App extends Component {
   featureClick = (e) => {
     var layer = e.target
     const data = layer.feature.properties
-    const dataSet = Object.keys(data).map(label => ({ label, value: Number(data[label]) }) )
-    dataSet.splice('id', 1)
-    this.setState({ chartData: dataSet })
+    let chartData = []
+    Object.keys(data).forEach(k => {
+      if(k !== 'AssetID' && k !== 'Sauid') {
+        chartData.push({label: k, value: Number(data[k])})
+        }
+    })
+    this.setState({ chartData: chartData })
   }
   
-  componentWillMount() {
+  componentDidMount() {
     // get and process url params
     const url = window.location.search
     const params = extractParams(url)
@@ -47,9 +51,9 @@ class App extends Component {
     }
     getData(params).then(geoJson => {
       const objKeys = Object.keys(geoJson.features[0].properties)
-      const chartData = []
+      let chartData = []
       objKeys.forEach(k => {
-        if(k !== 'id') {
+        if(k !== 'AssetID' && k !== 'Sauid') {
           chartData.push(
             {label: k, value: _.sumBy(geoJson.features, function(o) {
               return o.properties[k]
@@ -82,7 +86,7 @@ class App extends Component {
     // set map component
     let mapComponent
     switch(this.state.mapType) {
-      case 'choroplet':
+      case 'choropleth':
         mapComponent =  <ChoroplethMap center={center} data={geoJson} property={property} bind={this.bindFeatures}/>
         break
       case 'bubble':

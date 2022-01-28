@@ -15,14 +15,14 @@ class childComponent extends React.Component {
     this.state = {reactComponents: []};
   }
 
-  componentWillReceiveProps(nextProps) {
-    const props = nextProps.data;
-    const reactComponents = createReactComponents(props.d3DOM, props.state, nextProps.getState)
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      const props = this.props.data;
+      const reactComponents = createReactComponents(props.d3DOM, props.state, this.props.getState)
 
-    this.setState({reactComponents: reactComponents})
-  }
+      this.setState({reactComponents: reactComponents})
+    }
 
-  componentDidUpdate() {
     const reactD3Elements = document.querySelectorAll('[data-react-d3-id]');
     const state = this.props.data.state;
 

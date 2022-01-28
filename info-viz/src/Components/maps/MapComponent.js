@@ -11,7 +11,7 @@ const MapComponent = (props) => {
     // set map component
     let mapComponent
     switch(mapType) {
-      case 'choroplet':
+      case 'choropleth':
         mapComponent =  <ChoroplethMap center={center} data={data} property={property} bind={bind}/>
         break
       case 'bubble':

@@ -13,18 +13,20 @@ const SwipeMap = (props) => {
 
         // set styles for left layer
         const leftStyles = (feature) => {
-            return Number(feature.properties[property]) > 400 ? { color: "#f88348", weight: 1 } :
-                Number(feature.properties[property]) > 200 ? { color: "#f5ff2b", weight: 1 } :
-                Number(feature.properties[property]) > 100 ? { color: "#fdfda1", weight: 1 } :
-                Number(feature.properties[property]) > 0 ? { color: "#58d0f8", weight: 1 } :
-                Number(feature.properties[property]) === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
+            const val = Number(feature.properties[property]) * 200
+            return val > 400 ? { color: "#f88348", weight: 1 } :
+                val > 200 ? { color: "#f5ff2b", weight: 1 } :
+                val > 100 ? { color: "#fdfda1", weight: 1 } :
+                val > 0 ? { color: "#58d0f8", weight: 1 } :
+                val === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
         }
 
         // set styles for right layer
         const rightStyles = (feature) => {
-            return Number(feature.properties[property2]) > 400 ? { color: "red", weight: 1 } :
-                Number(feature.properties[property2]) > 200 ? { color: "red", weight: 1 } :
-                Number(feature.properties[property2]) === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
+            const val = Number(feature.properties[property]) * 100
+            return val > 400 ? { color: "red", weight: 1 } :
+                val > 200 ? { color: "red", weight: 1 } :
+                val === 0 ? { color: "#ffffff", opacity: 0.1 } : { color: "#ffffff", opacity: 0.1 }
         }
         // create map
         const map = L.map("map").setView(center, 13)
@@ -34,7 +36,7 @@ const SwipeMap = (props) => {
         map.createPane('right')
 
         // set base map layer
-        L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+        L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors',
             maxZoom: 19,
         }).addTo(map)

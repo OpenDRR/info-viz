@@ -10,9 +10,11 @@ export default class RadarChart extends React.Component {
     this.state = {d3DOM: [], state: []}
   }
 
-  componentWillReceiveProps(nextProps) {
-    let d3Data = d3DataToJSX(createRadarChart(nextProps.data))
-    this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      let d3Data = d3DataToJSX(createRadarChart(this.props.data))
+      this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+    }
   }
 
   render() {

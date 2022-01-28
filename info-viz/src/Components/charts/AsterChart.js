@@ -10,9 +10,11 @@ export default class AsterChart extends React.Component {
     this.state = {d3DOM: [], state: []}
   }
 
-  componentWillReceiveProps(nextProps) {
-    let d3Data = d3DataToJSX(createAsterChart(nextProps.data))
-    this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+  componentDidUpdate(prevProps) {
+    if (prevProps.data !== this.props.data) {
+      let d3Data = d3DataToJSX(createAsterChart(this.props.data))
+      this.setState({d3DOM: d3Data.mappedData, state: d3Data.state})
+    }
   }
 
   render() {
